@@ -11,7 +11,7 @@ def validate(entry):
 		return 0
 	return entry
 
-#Adds words containing letters chosen
+#Removes words containing letters inputted
 def check(entry):
 
 	if entry == 0:
@@ -29,16 +29,15 @@ def check(entry):
 			wordReader = csv.reader(g) #Guess object
 			words = next(wordReader) #Read word list from guesses
 
-			for word in words:
-				if entry[0] in word:
-					guessList.append(word)
-			if len(entry)>1:
-				for i in range(0, len(entry)):
-					tempList=[]
-					for guess in guessList:
-						if entry[i] in guess:
-							tempList.append(guess)
-					guessList=tempList
+			if len(entry)>0:
+				for word in words:
+					found=False
+					for i in range(0, len(entry)):
+						if entry[i] in word:
+							found=True
+					if found==False:
+						guessList.append(word)
+
 
 		with open(Current, 'w') as c:
 			printList=""
@@ -59,4 +58,4 @@ if __name__ == '__main__':
     #executed as script
 	print("Enter your letters:")
 	entry = input()
-	check(validate(entry))
+	check(entry)
