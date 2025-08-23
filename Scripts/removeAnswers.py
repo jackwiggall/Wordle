@@ -20,6 +20,7 @@ def remove():
 				for word in words:
 					if guess==word:
 						found=word
+						break
 				if found=="":
 					guessList.append(guess) #add to list of words
 					found=""

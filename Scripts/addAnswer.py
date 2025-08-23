@@ -23,6 +23,7 @@ def add():
 							if ans==word:
 								found=True #word exists in both dictionaries
 								ansList.append(word) #keep in list
+								break
 					if found==False: #only exists in this list
 						ansList.append(ans) #add to list
 
@@ -33,6 +34,7 @@ def add():
 						if ans!="":
 							if ans==word:
 								found=True #word exists in both dictionaries
+								break
 					if found==False: #only exists in this list
 						ansList.append(word) #add to list
 						print(word) #show new words

@@ -21,6 +21,7 @@ def check():
 				for word in words:
 					if word==guess:
 						print(str(x)+" "+word)
+						break
 	except IOError as e:
 	    print('Operation failed: %s' % e.strerror)
 	except:
