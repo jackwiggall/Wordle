@@ -1,4 +1,5 @@
 import csv
+
 newAnswers = ".//Dictionaries/NewAnswers.csv"
 Guesses = ".//Dictionaries/Guesses.csv"
 
@@ -7,11 +8,11 @@ try:
 
 		wordReader = csv.reader(nA) #NewAnswers object
 		words = next(wordReader) #Read word list from newAnswers
-		
+
 		guessReader = csv.reader(g) #Guess object
 		guesses = next(guessReader) #Read word list from guesses
-		
-		x=-1		
+
+		x=-1
 
 		for guess in guesses:
 			x=x+1
@@ -21,3 +22,5 @@ try:
 
 except IOError as e:
     print('Operation failed: %s' % e.strerror)
+except:
+	print("Unexpected error occured")
