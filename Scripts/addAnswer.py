@@ -4,7 +4,7 @@ newAnswers = ".//Dictionaries/NewAnswers.csv"
 Answers = ".//Dictionaries/Answers.csv"
 
 #function of script
-def add():
+def addFile():
 	try:
 		ansList = [] #list of existing answers
 		with open(newAnswers, 'r') as nA, open(Answers, 'r') as a:
@@ -56,6 +56,60 @@ def add():
 	except:
 		print("Unexpected error occured")
 
+def getEntry(userList):
+	print("Enter the word of choice:")
+	word_input = input(" ")
+	userList.append(word_input)
+	usr_input = 2
+	print("Please select an option:")
+	print("0 to exit")
+	print("1 to enter another word")
+	while (usr_input != '0') and (usr_input != '1'):
+		usr_input = input(" ")
+	if usr_input == '0':
+	    addEntry(userList)
+	elif usr_input == '1':
+		getEntry(userList)
+
+def addEntry(entryList):
+	print(entryList)
+	printList = ""
+	if (entryList!=""):
+		try:
+			with open(newAnswers, 'r') as nA:
+
+				oldList = csv.reader(nA) #NewAnswers object
+				try:
+					oldies = next(oldList) #Read word list from newAnswers
+				except:
+					oldies = ""
+
+				if (oldies!=""):
+					print("olduie")
+					for word in oldies:
+						if word!="":
+							printList += word+","
+					print(printList)
+
+			with open(newAnswers, 'w') as NA:
+				for word in entryList:
+					if word!="":
+						printList += word+","
+				NA.write(printList)
+		except:
+			print("Unexpected error occured")
+
 if __name__ == '__main__':
     #executed as script
-    add()
+	usr_input = 2
+	print("Please select an option:")
+	print("0 for adding from file")
+	print("1 for adding from input")
+	while (usr_input != '0') and (usr_input != '1'):
+		usr_input = input("")
+
+	if usr_input == '0':
+	    addFile()
+	elif usr_input == '1':
+		userList = []
+		getEntry(userList)
