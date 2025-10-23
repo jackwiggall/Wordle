@@ -14,46 +14,52 @@ def validate(entry):
 #Adds words containing letters chosen
 def check(entry):
 
-	if entry == 0:
+	emptyList = True
+	guessList=[]
+	if entry != 0:
 		try:
-			with open(Current, 'w') as c:
-				c.write("")
+			with open(Current, 'r') as c:
+				currentReader = csv.reader(c)
+				guessList=next(currentReader)
+				if len(guessList)>1:
+					emptyList=False
 		except:
 			print("Invalid entry")
-		return
 
-	try:
-		guessList=[]
-		with open(Guesses, 'r') as g:
+		try:
+			with open(Guesses, 'r') as g:
 
-			wordReader = csv.reader(g) #Guess object
-			words = next(wordReader) #Read word list from guesses
+				wordReader = csv.reader(g) #Guess object
+				words = next(wordReader) #Read word list from guesses
 
-			for word in words:
-				if entry[0] in word:
-					guessList.append(word)
-			if len(entry)>1:
-				for i in range(0, len(entry)):
-					tempList=[]
-					for guess in guessList:
-						if entry[i] in guess:
-							tempList.append(guess)
-					guessList=tempList
+				if emptyList:
+					for word in words:
+						if entry[0] in word:
+							guessList.append(word)
+				if len(entry)>0:
+					for i in range(0, len(entry)):
+						tempList=[]
+						#print()
+						#print(guessList)
+						for guess in guessList:
+							if entry[i] in guess:
+								tempList.append(guess)
+						guessList=tempList
 
-		with open(Current, 'w') as c:
-			printList=""
-			guessList.sort()
-			for word in guessList:
-				print(word)
-				if word!="":
-					printList += word+","
-			c.write(printList)
+			with open(Current, 'w') as c:
+				printList=""
+				guessList.sort()
+				print(guessList)
+				for word in guessList:
+					if word!="":
+						printList += word+","
+				c.write(printList)
 
-	except IOError as e:
-		print('Operation failed: %s' % e.strerror)
-	#except:
-		#print("Unexpected error occured")
-		#return
+		except IOError as e:
+			print('Operation failed: %s' % e.strerror)
+		#except:
+			#print("Unexpected error occured")
+			#return
 
 if __name__ == '__main__':
     #executed as script

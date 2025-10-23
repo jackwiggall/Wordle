@@ -14,45 +14,44 @@ def validate(entry):
 #Removes words containing letters inputted
 def check(entry):
 
-	if entry == 0:
+	if entry != 0:
 		try:
-			with open(Current, 'w') as c:
-				c.write("")
+			with open(Current, 'r') as c:
+				currentReader = csv.reader(c)
+				guessList=next(currentReader)
 		except:
-			print("Invalid entry")
-		return
+			print("Invalid current list")
+		try:
+			guessList=[]
+			with open(Guesses, 'r') as g:
 
-	try:
-		guessList=[]
-		with open(Guesses, 'r') as g:
+				wordReader = csv.reader(g) #Guess object
+				words = next(wordReader) #Read word list from guesses
 
-			wordReader = csv.reader(g) #Guess object
-			words = next(wordReader) #Read word list from guesses
-
-			if len(entry)>0:
-				for word in words:
-					found=False
-					for i in range(0, len(entry)):
-						if entry[i] in word:
-							found=True
-					if found==False:
-						guessList.append(word)
+				if len(entry)>0:
+					for word in words:
+						found=False
+						for i in range(0, len(entry)):
+							if entry[i] in word:
+								found=True
+						if found==False:
+							guessList.append(word)
 
 
-		with open(Current, 'w') as c:
-			printList=""
-			guessList.sort()
-			for word in guessList:
-				print(word)
-				if word!="":
-					printList += word+","
-			c.write(printList)
+			with open(Current, 'w') as c:
+				printList=""
+				guessList.sort()
+				for word in guessList:
+					print(word)
+					if word!="":
+						printList += word+","
+				c.write(printList)
 
-	except IOError as e:
-		print('Operation failed: %s' % e.strerror)
-	#except:
-		#print("Unexpected error occured")
-		#return
+		except IOError as e:
+			print('Operation failed: %s' % e.strerror)
+		#except:
+			#print("Unexpected error occured")
+			#return
 
 if __name__ == '__main__':
     #executed as script
