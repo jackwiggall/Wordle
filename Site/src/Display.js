@@ -1,7 +1,11 @@
-import { useState } from 'react'
+import { useState,useReducer } from 'react'
 
 function Display() {
+  const [, forceUpdate] = useReducer(x => x + 1, 0);
 
+  function handleClick() {
+    forceUpdate();
+  }
   const alphabet = ['A','B','C','D','E','F','G','H','I','J','','K','L','M','N','O','P','Q','R','S','','T','U','V','W','X','Y','Z'];
   const keyboard = ['Q','W','E','R','T','Y','U','I','O','P','','A','S','D','F','G','H','J','K','L','','Z','X','C','V','B','N','M'];
 
@@ -12,24 +16,24 @@ function Display() {
   const keyboardList = keyboard.map((a,id) => {
       if(a!=='') {
         if (kbUsed[id]===false) {
-          return <li key={id}><button style={{fontSize: "40px"}} onClick={() => {setUsed(id)}}>{a}</button></li>
+          return <li key={id}><button style={{fontSize: "40px"}} onClick={() => {setUsed(id);handleClick();}}>{a}</button></li>
         }else {
-          return <li key={id}><button style={{fontSize: "40px",background:"gray"}} onClick={() => {setUsed(id)}}>{a}</button></li>
+          return <li key={id}><button style={{fontSize: "40px",background:"gray"}} onClick={() => {setUsed(id);handleClick();}}>{a}</button></li>
         }
       }else {
-        return <br/>
+        return <br key={id}/>
       }
     }
   );
   const alphabetList = alphabet.map((a,id) => {
       if(a!=='') {
         if (abUsed[id]===false) {
-          return <li key={id}><button style={{fontSize: "40px"}} onClick={() => {setUsed(id)}}>{a}</button></li>
+          return <li key={id}><button style={{fontSize: "40px"}} onClick={() => {setUsed(id);handleClick();}}>{a}</button></li>
         }else {
-          return <li key={id}><button style={{fontSize: "40px",background:"gray"}} onClick={() => {setUsed(id)}}>{a}</button></li>
+          return <li key={id}><button style={{fontSize: "40px",background:"gray"}} onClick={() => {setUsed(id);handleClick();}}>{a}</button></li>
         }
       }else {
-        return <br/>
+        return <br key={id}/>
       }
     }
   );
