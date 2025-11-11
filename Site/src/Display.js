@@ -16,9 +16,9 @@ function Display() {
   const keyboardList = keyboard.map((a,id) => {
       if(a!=='') {
         if (kbUsed[id]===false) {
-          return <li key={id}><button style={{fontSize: "40px"}} onClick={() => {setUsed(id);handleClick();}}>{a}</button></li>
+          return <li key={id}><button style={{fontSize: "100%"}} onClick={() => {setUsed(id);handleClick();}}><strong>{a}</strong></button></li>
         }else {
-          return <li key={id}><button style={{fontSize: "40px",background:"gray"}} onClick={() => {setUsed(id);handleClick();}}>{a}</button></li>
+          return <li key={id}><button style={{fontSize: "100%",background:"gray"}} onClick={() => {setUsed(id);handleClick();}}><strong>{a}</strong></button></li>
         }
       }else {
         return <br key={id}/>
@@ -28,9 +28,9 @@ function Display() {
   const alphabetList = alphabet.map((a,id) => {
       if(a!=='') {
         if (abUsed[id]===false) {
-          return <li key={id}><button style={{fontSize: "40px"}} onClick={() => {setUsed(id);handleClick();}}>{a}</button></li>
+          return <li key={id}><button style={{fontSize: "100%"}} onClick={() => {setUsed(id);handleClick();}}><strong>{a}</strong></button></li>
         }else {
-          return <li key={id}><button style={{fontSize: "40px",background:"gray"}} onClick={() => {setUsed(id);handleClick();}}>{a}</button></li>
+          return <li key={id}><button style={{fontSize: "100%",background:"gray"}} onClick={() => {setUsed(id);handleClick();}}><strong>{a}</strong></button></li>
         }
       }else {
         return <br key={id}/>
@@ -48,6 +48,7 @@ function Display() {
           let otherList = abUsed;
           otherList[i] = !otherList[i];
           setABUsed(otherList);
+          //exit
         }
       }
     }else {
@@ -59,6 +60,24 @@ function Display() {
           let otherList = kbUsed;
           otherList[i] = !otherList[i];
           setKBUsed(otherList);
+          //exit
+        }
+      }
+    }
+  }
+
+//flips all tiles that have been disabled
+  function reset() {
+    if (order==="kb") {
+      for (let i = 0; i < alphabet.length; ++i) {
+        if (kbUsed[i]) {
+          setUsed(i);
+        }
+      }
+    } else{
+      for (let i = 0; i < alphabet.length; ++i) {
+        if (abUsed[i]) {
+          setUsed(i);
         }
       }
     }
@@ -67,15 +86,17 @@ function Display() {
   if (order==="kb") {
     return (
       <div className="Display">
-        <ul>{keyboardList}</ul>
+        <ul style={{alignItems: "center"}}>{keyboardList}</ul>
         <button onClick={() => {setOrder("ab");}}>Change Order</button>
+        <button onClick={() => {reset();handleClick();}}>Reset</button>
       </div>
     )
   }else {
     return (
       <div className="Display">
-        <ul>{alphabetList}</ul>
+        <ul style={{alignItems: "center"}}>{alphabetList}</ul>
         <button onClick={() => {setOrder("kb");}}>Change Order</button>
+        <button onClick={() => {reset();handleClick();}}>Reset</button>
       </div>
     )
   }
