@@ -1,4 +1,5 @@
 import { useState,useReducer } from 'react'
+import guesses from './Dictionaries/Guesses.json'
 
 function Display() {
   const [, forceUpdate] = useReducer(x => x + 1, 0);
@@ -83,12 +84,58 @@ function Display() {
     }
   }
 
+  function list() {
+    //console.log(guesses);
+    let guessList = [];
+    let guessLen = -1;
+
+    let charList = [];
+    let charLen = -1;
+
+    for (let i = 0; i < alphabet.length; ++i) {
+        if (abUsed[i]) {
+          charLen++;
+          charList[charLen] = alphabet[i].toLowerCase();
+
+        }
+    }
+    if (charLen !== -1 )
+    {
+      for (let i = 0; i < guesses.length; ++i) {
+        //loop possible guess list
+        let word = guesses[i];
+        let possible = true;
+        for (let j = 0; j < 5; ++j) {
+          //loop for length of word
+          for (let k = 0; k < charLen; ++k) {
+            //loop to remove characters from list
+              if (word[j]===charList[k]) {
+                possible = false;
+                break;
+              }
+          }
+          if (!possible) {
+            break;
+          }
+        }
+        if (possible) {
+          guessLen++;
+          guessList[guessLen] = word;
+        }
+      }
+      console.log(guessList);
+    }else {
+      console.log("no characters to remove");
+    }
+  }
+
   if (order==="kb") {
     return (
       <div className="Display">
         <ul style={{alignItems: "center"}}>{keyboardList}</ul>
         <button onClick={() => {setOrder("ab");}}>Change Order</button>
         <button onClick={() => {reset();handleClick();}}>Reset</button>
+        <button onClick={() => {list();handleClick();}}>List Options</button>
       </div>
     )
   }else {
@@ -97,6 +144,7 @@ function Display() {
         <ul style={{alignItems: "center"}}>{alphabetList}</ul>
         <button onClick={() => {setOrder("kb");}}>Change Order</button>
         <button onClick={() => {reset();handleClick();}}>Reset</button>
+        <button onClick={() => {list();handleClick();}}>List Options</button>
       </div>
     )
   }
