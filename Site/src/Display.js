@@ -11,15 +11,18 @@ function Display() {
   const keyboard = ['Q','W','E','R','T','Y','U','I','O','P','','A','S','D','F','G','H','J','K','L','','Z','X','C','V','B','N','M'];
 
   const [order, setOrder] = useState("kb");
-  const [kbUsed, setKBUsed] = useState([false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]);
-  const [abUsed, setABUsed] = useState([false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false]);
+  const [kbUsed, setKBUsed] = useState([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
+  const [abUsed, setABUsed] = useState([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
+//0=possible, 1=no possible, 2=yellow/in word
 
   const keyboardList = keyboard.map((a,id) => {
       if(a!=='') {
-        if (kbUsed[id]===false) {
+        if (kbUsed[id]===0) {
           return <li key={id}><button style={{fontSize: "100%"}} onClick={() => {setUsed(id);handleClick();}}><strong>{a}</strong></button></li>
-        }else {
+        }else if (kbUsed[id]===1) {
           return <li key={id}><button style={{fontSize: "100%",background:"gray"}} onClick={() => {setUsed(id);handleClick();}}><strong>{a}</strong></button></li>
+        }else {
+          return <li key={id}><button style={{fontSize: "100%",background:"#d5b338"}} onClick={() => {setUsed(id);handleClick();}}><strong>{a}</strong></button></li>
         }
       }else {
         return <br key={id}/>
@@ -28,10 +31,12 @@ function Display() {
   );
   const alphabetList = alphabet.map((a,id) => {
       if(a!=='') {
-        if (abUsed[id]===false) {
+        if (abUsed[id]===0) {
           return <li key={id}><button style={{fontSize: "100%"}} onClick={() => {setUsed(id);handleClick();}}><strong>{a}</strong></button></li>
-        }else {
+        }else if (abUsed[id]===1) {
           return <li key={id}><button style={{fontSize: "100%",background:"gray"}} onClick={() => {setUsed(id);handleClick();}}><strong>{a}</strong></button></li>
+        }else {
+          return <li key={id}><button style={{fontSize: "100%",background:"#d5b338"}} onClick={() => {setUsed(id);handleClick();}}><strong>{a}</strong></button></li>
         }
       }else {
         return <br key={id}/>
@@ -42,24 +47,48 @@ function Display() {
   function setUsed(id) {
     if (order==="kb") {
       let newList = kbUsed;
-      newList[id] = !newList[id];
+      if (newList[id]===2) {
+        newList[id]=0;
+      }else if(newList[id]===1){
+        newList[id]=2;
+      }else {
+        newList[id]=1;
+      }
       setKBUsed(newList);
       for (let i = 0; i < alphabet.length; ++i) {
         if (alphabet[i]===keyboard[id]) {
           let otherList = abUsed;
-          otherList[i] = !otherList[i];
+          if (otherList[i]===2) {
+            otherList[i]= 0;
+          }else if(otherList[i]===1){
+            otherList[i]=2;
+          }else {
+            otherList[i]=1;
+          }
           setABUsed(otherList);
           //exit
         }
       }
     }else {
       let newList = abUsed;
-      newList[id] = !newList[id];
+      if (newList[id]===2) {
+        newList[id]=0;
+      }else if(newList[id]===1){
+        newList[id]=2;
+      }else {
+        newList[id]=1;
+      }
       setABUsed(newList);
       for (let i = 0; i < keyboard.length; ++i) {
         if (keyboard[i]===alphabet[id]) {
           let otherList = kbUsed;
-          otherList[i] = !otherList[i];
+          if (otherList[i]===2) {
+            otherList[i]=0;
+          }else if(otherList[i]===1){
+            otherList[i]=2;
+          }else {
+            otherList[i]=1;
+          }
           setKBUsed(otherList);
           //exit
         }
@@ -71,13 +100,19 @@ function Display() {
   function reset() {
     if (order==="kb") {
       for (let i = 0; i < alphabet.length; ++i) {
-        if (kbUsed[i]) {
+        if (kbUsed[i]===1) {
+          setUsed(i);
+        }
+        if (kbUsed[i]===2) {
           setUsed(i);
         }
       }
     } else{
       for (let i = 0; i < alphabet.length; ++i) {
-        if (abUsed[i]) {
+        if (abUsed[i]===1) {
+          setUsed(i);
+        }
+        if (abUsed[i]===2) {
           setUsed(i);
         }
       }
@@ -93,10 +128,9 @@ function Display() {
     let charLen = -1;
 
     for (let i = 0; i < alphabet.length; ++i) {
-        if (abUsed[i]) {
+        if (abUsed[i]===1) {
           charLen++;
           charList[charLen] = alphabet[i].toLowerCase();
-
         }
     }
     if (charLen !== -1 )
@@ -123,11 +157,60 @@ function Display() {
           guessList[guessLen] = word;
         }
       }
-      console.log(guessList);
+      yellowList(guessList);
     }else {
       console.log("no characters to remove");
+      yellowList(guesses);
     }
   }
+
+  function yellowList(guessList) {
+    let newList = [];
+    if (guessList.length!==0) {
+      let charList = [];
+      let charLen = -1;
+      for (let i = 0; i < alphabet.length; ++i) {
+          if (abUsed[i]===2) {
+            charLen++;
+            charList[charLen] = alphabet[i].toLowerCase();
+          }
+      }
+      if (charLen !== -1 ) {
+        newList = guessList;
+        for (let i = 0; i < charLen+1; ++i) {
+          newList = yellowCheck(newList,charList[i]);
+        }
+        console.log(newList);
+    }else {
+      console.log("no yellows");
+      console.log(guessList);
+    }
+  }else {
+    console.log("empty list");
+  }
+}
+
+function yellowCheck(guessList,char) {
+  let newList = [];
+  let guessLen = -1;
+  for (let i = 0; i < guessList.length; ++i) {
+    //loop possible guess list
+    let word = guessList[i];
+    let possible = false;
+    for (let k = 0; k < 5; ++k) {
+      //loop for length of word
+      if (word[k]===char) {
+          possible = true;
+          break;
+      }
+    } if (possible) {
+      guessLen++;
+      newList[guessLen] = word;
+    }
+  }
+
+  return newList;
+}
 
   if (order==="kb") {
     return (
