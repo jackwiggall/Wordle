@@ -1,5 +1,6 @@
 import { useState,useReducer } from 'react'
 import guesses from './Dictionaries/Guesses.json'
+import words from './Dictionaries/Words.json'
 
 function Display() {
   const [, forceUpdate] = useReducer(x => x + 1, 0);
@@ -10,10 +11,17 @@ function Display() {
   const alphabet = ['A','B','C','D','E','F','G','H','I','J','','K','L','M','N','O','P','Q','R','S','','T','U','V','W','X','Y','Z'];
   const keyboard = ['Q','W','E','R','T','Y','U','I','O','P','','A','S','D','F','G','H','J','K','L','','Z','X','C','V','B','N','M'];
 
-  const [order, setOrder] = useState("kb");
+  const [order, setOrder] = useState("kb"); //which keyboard layout
   const [kbUsed, setKBUsed] = useState([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
   const [abUsed, setABUsed] = useState([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
 //0=possible, 1=no possible, 2=yellow/in word
+
+const [dict, setDict] = useState("Guesses");
+const handleChange = (e) => {
+    setDict(e.target.value);
+    handleClick();
+  };
+//which dictionary is being used
 
   const keyboardList = keyboard.map((a,id) => {
       if(a!=='') {
@@ -127,6 +135,14 @@ function Display() {
     let charList = [];
     let charLen = -1;
 
+    let wordList = [];
+
+    if (dict==="Guesses") {
+      wordList = guesses;
+    }else {
+      wordList = words;
+    }
+
     for (let i = 0; i < alphabet.length; ++i) {
         if (abUsed[i]===1) {
           charLen++;
@@ -135,9 +151,9 @@ function Display() {
     }
     if (charLen !== -1 )
     {
-      for (let i = 0; i < guesses.length; ++i) {
+      for (let i = 0; i < wordList.length; ++i) {
         //loop possible guess list
-        let word = guesses[i];
+        let word = wordList[i];
         let possible = true;
         for (let j = 0; j < 5; ++j) {
           //loop for length of word
@@ -159,8 +175,8 @@ function Display() {
       }
       yellowList(guessList);
     }else {
-      console.log("no characters to remove");
-      yellowList(guesses);
+      //console.log("no characters to remove");
+      yellowList(wordList);
     }
   }
 
@@ -182,7 +198,7 @@ function Display() {
         }
         console.log(newList);
     }else {
-      console.log("no yellows");
+      //console.log("no yellows");
       console.log(guessList);
     }
   }else {
@@ -219,6 +235,10 @@ function yellowCheck(guessList,char) {
         <button onClick={() => {setOrder("ab");}}>Change Order</button>
         <button onClick={() => {reset();handleClick();}}>Reset</button>
         <button onClick={() => {list();handleClick();}}>List Options</button>
+        <select name="dictionary" value={dict} onChange={handleChange}>
+          <option value="Guesses">Guesses</option>
+          <option value="Words">All Words</option>
+        </select>
       </div>
     )
   }else {
@@ -228,6 +248,10 @@ function yellowCheck(guessList,char) {
         <button onClick={() => {setOrder("kb");}}>Change Order</button>
         <button onClick={() => {reset();handleClick();}}>Reset</button>
         <button onClick={() => {list();handleClick();}}>List Options</button>
+        <select name="dictionary" value={dict} onChange={handleChange}>
+          <option value="Guesses">Guesses</option>
+          <option value="Words">All Words</option>
+        </select>
       </div>
     )
   }
