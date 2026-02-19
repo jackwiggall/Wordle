@@ -17,6 +17,7 @@ function Display() {
 //0=possible, 1=no possible, 2=yellow/in word
 
 const [dict, setDict] = useState("Guesses");
+const [total, setTotal] = useState(""); //all the possible word list
 const handleChange = (e) => {
     setDict(e.target.value);
     handleClick();
@@ -197,12 +198,15 @@ const handleChange = (e) => {
           newList = yellowCheck(newList,charList[i]);
         }
         console.log(newList);
+        setTotal(newList);
     }else {
       //console.log("no yellows");
       console.log(guessList);
+      setTotal(guessList);
     }
   }else {
     console.log("empty list");
+    setTotal("");
   }
 }
 
@@ -230,7 +234,7 @@ function yellowCheck(guessList,char) {
 
   if (order==="kb") {
     return (
-      <div className="Display">
+      <div className="Display" style={{marginTop: "0"}}>
         <ul style={{alignItems: "center"}}>{keyboardList}</ul>
         <button onClick={() => {setOrder("ab");}}>Change Order</button>
         <button onClick={() => {reset();handleClick();}}>Reset</button>
@@ -239,11 +243,15 @@ function yellowCheck(guessList,char) {
           <option value="Guesses">Guesses</option>
           <option value="Words">All Words</option>
         </select>
+        <div className="Results">
+        <p style={{fontSize: "20px",marginBottom:"0"}}>({total.length})</p>
+          <textarea name="message" value={total} />
+        </div>
       </div>
     )
   }else {
     return (
-      <div className="Display">
+      <div className="Display" style={{marginTop: "0"}}>
         <ul style={{alignItems: "center"}}>{alphabetList}</ul>
         <button onClick={() => {setOrder("kb");}}>Change Order</button>
         <button onClick={() => {reset();handleClick();}}>Reset</button>
@@ -252,6 +260,10 @@ function yellowCheck(guessList,char) {
           <option value="Guesses">Guesses</option>
           <option value="Words">All Words</option>
         </select>
+        <div className="Results">
+        <p style={{fontSize: "20px",marginBottom:"0"}}>({total.length})</p>
+          <textarea name="message" value={total} />
+        </div>
       </div>
     )
   }

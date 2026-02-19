@@ -59,12 +59,12 @@ const onFormSubmit = e => {
 }
 
   return (
-    <div className="Input">
-      <form onSubmit={onFormSubmit}>
+    <div className="Input" style={{marginBottom: "0"}}>
+      <form onSubmit={onFormSubmit} style={{marginBottom: "0"}}>
         <input value={value} maxLength="5" onChange={e => setValue(e.target.value)}/>
         <button type="submit">Submit</button>
       </form>
-      <p style={{fontSize: "20px",marginTop:"0"}} id="response"></p>
+      <p style={{fontSize: "20px",marginTop:"0",marginBottom:"0"}} id="response"></p>
     </div>
   );
 }
