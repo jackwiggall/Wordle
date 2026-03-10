@@ -64,7 +64,7 @@ const handleChange = (e) => {
         newList[id]=1;
       }
       setKBUsed(newList);
-      for (let i = 0; i < alphabet.length; ++i) {
+      for (let i = 0; i < alphabet.length+1; ++i) {
         if (alphabet[i]===keyboard[id]) {
           let otherList = abUsed;
           if (otherList[i]===2) {
@@ -88,7 +88,7 @@ const handleChange = (e) => {
         newList[id]=1;
       }
       setABUsed(newList);
-      for (let i = 0; i < keyboard.length; ++i) {
+      for (let i = 0; i < keyboard.length+1; ++i) {
         if (keyboard[i]===alphabet[id]) {
           let otherList = kbUsed;
           if (otherList[i]===2) {

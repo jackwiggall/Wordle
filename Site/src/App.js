@@ -1,6 +1,7 @@
 import logo from './logo.svg';
-import Display from './Display.js';
-import Input from './Input.js';
+//import Display from './Display.js';
+//import Input from './Input.js';
+import WordInput from './WordInput.js';
 import './App.css';
 
 function App() {
@@ -8,8 +9,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <Input />
-        <Display />
+        <WordInput />
       </header>
     </div>
   );
