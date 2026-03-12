@@ -31,7 +31,7 @@ const handleChange = (e) => {
         }else if (kbUsed[id]===1) {
           return <li key={id}><button style={{fontSize: "100%",background:"gray"}} onClick={() => {setUsed(id);handleClick();}}><strong>{a}</strong></button></li>
         }else {
-          return <li key={id}><button style={{fontSize: "100%",background:"#d5b338"}} onClick={() => {setUsed(id);handleClick();}}><strong>{a}</strong></button></li>
+          return <li key={id}><button style={{fontSize: "100%",background:"#d1b036"}} onClick={() => {setUsed(id);handleClick();}}><strong>{a}</strong></button></li>
         }
       }else {
         return <br key={id}/>
@@ -45,7 +45,7 @@ const handleChange = (e) => {
         }else if (abUsed[id]===1) {
           return <li key={id}><button style={{fontSize: "100%",background:"gray"}} onClick={() => {setUsed(id);handleClick();}}><strong>{a}</strong></button></li>
         }else {
-          return <li key={id}><button style={{fontSize: "100%",background:"#d5b338"}} onClick={() => {setUsed(id);handleClick();}}><strong>{a}</strong></button></li>
+          return <li key={id}><button style={{fontSize: "100%",background:"#d1b036"}} onClick={() => {setUsed(id);handleClick();}}><strong>{a}</strong></button></li>
         }
       }else {
         return <br key={id}/>
