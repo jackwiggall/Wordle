@@ -5,7 +5,7 @@ function WordInput() {
 
   const [winput, setInput] = useState("");
   const [letters, setLetters] = useState([]);
-  const [row1, setRow1] = useState([0,0,0,0,0]);
+  const [row1, setRow1] = useState([[0,0,0,0,0]]);
 
   const [, forceUpdate] = useReducer(x => x + 1, 0);
 
@@ -24,42 +24,51 @@ function WordInput() {
 
   const onButtonSubmit = e => {
     e.preventDefault();
-    if (winput.length=="") {
+    if (winput.length!==5) {
       console.log("Not 5 chars");
     }else {
       let word = [];
       for (let i = 0; i < 5; ++i) {
         word[i] = winput[i];
       }
-      setLetters(word);
+      if (letters.length!==0) {
+        setRow1([...row1,[0,0,0,0,0]]);
+        setLetters([...letters,word]);
+      }else {
+        setLetters([word]);
+      }
     }
   }
   const onButtonReset = e => {
     e.preventDefault();
-    //document.getElementById("PriorEntry").innerText = "";
     setLetters([]);
-    setRow1([0,0,0,0,0]);
+    setRow1([[0,0,0,0,0]]);
   }
 
-  const submmissionList = letters.map((a,id) => {
+  const submmissionList = letters.map((a,i) => {
       if(a!=='') {
-        if (row1[id]===0) {
-          return <button className="inputButtons" onClick={() => {changeColor(id);}}>{a}</button>
-        }else if (row1[id]===1) {
-          return <button className="inputButtons" style={{background:"#d1b036"}} onClick={() => {changeColor(id);}}>{a}</button>
-        }else {
-          return <button className="inputButtons" style={{background:"#6aaa64"}} onClick={() => {changeColor(id);}}>{a}</button>
-        }
+        let temp = a.map((b,j) => {
+          if (row1[i][j]===0) {
+            return <button className="inputButtons" onClick={() => {changeColor(i,j);}}>{b}</button>
+          }else if (row1[i][j]===1) {
+            return <button className="inputButtons" style={{background:"#d1b036"}} onClick={() => {changeColor(i,j);}}>{b}</button>
+          }else {
+            return <button className="inputButtons" style={{background:"#6aaa64"}} onClick={() => {changeColor(i,j);}}>{b}</button>
+          }
+        });
+        return <div>{temp}</div>;
+      } else {
+        return <p />
       }
     }
   );
 
-  function changeColor(id) {
+  function changeColor(i,j) {
     let temp = row1;
-    if (row1[id]<2) {
-      temp[id]++;
+    if (row1[i][j]<2) {
+      temp[i][j]++;
     }else{
-      temp[id]=0;
+      temp[i][j]=0;
     }
     setRow1(temp);
     handleClick();
