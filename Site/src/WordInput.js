@@ -106,13 +106,13 @@ function checkColor(row,i) {
               if (yellow[k][l]===j) {
                 //number already exists, ignore
                 found = true;
-                console.log("repeat");
+                //console.log("repeat");
                 break;
               }
             }
             if (!found) {
               let tempYellow = yellow;
-              console.log("not found");
+              //console.log("not found");
               tempYellow[k] = [tempYellow[k],j];
               setYellow(tempYellow);
             }
@@ -122,12 +122,12 @@ function checkColor(row,i) {
         if (pos===-1&&!found) {
           //character not in yellow
           setYellow([...yellow,[c,j]]);
-          console.log("no yell");
+          //console.log("no yell");
         }
       }else {
         //first yellow entry
         setYellow([[c,j]]);
-        console.log("first entry");
+        //console.log("first entry");
       }
 
     }else {
@@ -182,7 +182,6 @@ function list() {
         }
       }
 
-      console.log(yellow);
       //for yellow, first remove all words not containing any instance of letter
       for (let y = 0; y < yellow.length; ++y) {
         let tempList = [];
@@ -194,6 +193,27 @@ function list() {
               tempList[count] = newList[i];
               count++;
               break;
+            }
+          }
+        }
+        newList = tempList;
+      }
+      //now confirm that yellow letters are not in place where it would be green
+      for (let y = 0; y < yellow.length; ++y) {
+        let tempList = [];
+        let count = 0;
+
+        for (let i = 0; i < newList.length; ++i) {
+          for (let j = 1; j < yellow[y].length; ++j) {
+            let tempNum = yellow[y][j];
+            let found = false;
+            if (newList[i][tempNum]===yellow[y][0].toLowerCase()) {
+              found = true;
+              break; //character in word matches which would make green not yellow
+            }
+            if (!found) {
+              tempList[count] = newList[i];
+              count++;
             }
           }
         }
