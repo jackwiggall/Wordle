@@ -83,7 +83,7 @@ function WordInput() {
   );
 
 function checkColor(row,i) {
-  console.log(row);
+  //console.log(row);
   for (let j = 0; j < 5; ++j) {
     let c = letters[i][j];
     if (row[j]===0) {
@@ -96,24 +96,38 @@ function checkColor(row,i) {
     }else if (row[j]===1) {
       //yellow
       if (yellow.length!==0) {
-        console.log(yellow);
+        //console.log(yellow);
         let pos = -1; //check if character already in yellow
+        let found = false;
         for (let k = 0; k < yellow.length; ++k) {
           if (yellow[k][0] === c) {
             pos = k;
-            let tempYellow = yellow;
-            tempYellow[k] = [...tempYellow[k],j];
-            setYellow(tempYellow);
+            for (let l = 0; l < yellow[k].length; ++l) {
+              if (yellow[k][l]===j) {
+                //number already exists, ignore
+                found = true;
+                console.log("repeat");
+                break;
+              }
+            }
+            if (!found) {
+              let tempYellow = yellow;
+              console.log("not found");
+              tempYellow[k] = [tempYellow[k],j];
+              setYellow(tempYellow);
+            }
             break;
           }
         }
-        if (pos===-1) {
+        if (pos===-1&&!found) {
           //character not in yellow
-          setYellow([yellow,[c,j]]);
+          setYellow([...yellow,[c,j]]);
+          console.log("no yell");
         }
       }else {
         //first yellow entry
         setYellow([[c,j]]);
+        console.log("first entry");
       }
 
     }else {
@@ -167,7 +181,26 @@ function list() {
           newList = tempList;
         }
       }
-      console.log(newList);
+
+      console.log(yellow);
+      //for yellow, first remove all words not containing any instance of letter
+      for (let y = 0; y < yellow.length; ++y) {
+        let tempList = [];
+        let count = 0;
+
+        for (let i = 0; i < newList.length; ++i) {
+          for (let j = 0; j < 5; ++j) {
+            if (newList[i][j]===yellow[y][0].toLowerCase()) {
+              tempList[count] = newList[i];
+              count++;
+              break;
+            }
+          }
+        }
+        newList = tempList;
+      }
+
+
       setTotal(newList);
 
     }else {
