@@ -1,11 +1,26 @@
 import RICIBs from 'react-individual-character-input-boxes';
 import {useState,useReducer} from 'react';
+import guesses from './Dictionaries/Guesses.json'
+import words from './Dictionaries/Words.json'
 
 function WordInput() {
 
   const [winput, setInput] = useState("");
   const [letters, setLetters] = useState([]);
+
   const [row1, setRow1] = useState([[0,0,0,0,0]]);
+
+  const [white, setWhite] = useState([]);
+  const [yellow, setYellow] = useState([]);
+  const [green, setGreen] = useState(['_','_','_','_','_']);
+
+  const [dict, setDict] = useState("Guesses");
+  const [total, setTotal] = useState(""); //all the possible word list
+  const handleChange = (e) => {
+      setDict(e.target.value);
+      list();
+      handleClick();
+    };
 
   const [, forceUpdate] = useReducer(x => x + 1, 0);
 
@@ -43,6 +58,10 @@ function WordInput() {
     e.preventDefault();
     setLetters([]);
     setRow1([[0,0,0,0,0]]);
+    setWhite([]);
+    setYellow([]);
+    setGreen(['_','_','_','_','_']);
+    list();
   }
 
   const submmissionList = letters.map((a,i) => {
@@ -56,22 +75,80 @@ function WordInput() {
             return <button className="inputButtons" style={{background:"#6aaa64"}} onClick={() => {changeColor(i,j);}}>{b}</button>
           }
         });
-        return <div>{temp}</div>;
+        return <div>{temp}<button className="inputButtons" onClick={() => {checkColor(row1[i],i);}}>🎯</button></div>;
       } else {
         return <p />
       }
     }
   );
 
-  function changeColor(i,j) {
-    let temp = row1;
-    if (row1[i][j]<2) {
-      temp[i][j]++;
-    }else{
-      temp[i][j]=0;
+function checkColor(row,i) {
+  console.log(row);
+  for (let j = 0; j < 5; ++j) {
+    let c = letters[i][j];
+    if (row[j]===0) {
+      //white
+      if (white!==[]) {
+        setWhite([...white,c]);
+      }else {
+        setWhite([c]);
+      }
+    }else if (row[j]===1) {
+      //yellow
+      if (yellow.length!==0) {
+        console.log(yellow);
+        let pos = -1; //check if character already in yellow
+        for (let k = 0; k < yellow.length; ++k) {
+          if (yellow[k][0] === c) {
+            pos = k;
+            let tempYellow = yellow;
+            tempYellow[k] = [...tempYellow[k],j];
+            setYellow(tempYellow);
+            break;
+          }
+        }
+        if (pos===-1) {
+          //character not in yellow
+          setYellow([yellow,[c,j]]);
+        }
+      }else {
+        //first yellow entry
+        setYellow([[c,j]]);
+      }
+
+    }else {
+      //green
+      let tempGreen = green;
+      tempGreen[j] = c;
+      setGreen(tempGreen);
     }
-    setRow1(temp);
+  }
+  handleClick();
+}
+
+  function changeColor(i,j) {
+    let w = row1; //word in number form
+
+    if (row1[i][j]===0) {
+      w[i][j]++;
+    }else if (row1[i][j]===1) {
+      w[i][j]++;
+    }else {
+      w[i][j]=0;
+    }
+    setRow1(w);
     handleClick();
+  }
+
+  function list() {
+    let wordList = [];
+
+    if (dict==="Guesses") {
+      wordList = guesses;
+    }else {
+      wordList = words;
+    }
+    setTotal(wordList);
   }
 
   if (letters.length===0) {
@@ -91,6 +168,16 @@ function WordInput() {
           <button type="submit">Enter</button></form>
           <form onSubmit={onButtonReset} style={{display:"inline"}}>
           <button type="submit">Reset</button></form>
+
+          <div className="Results">
+          <p style={{fontSize: "20px",marginBottom:"0"}}>({total.length})</p>
+            <textarea name="message" value={total} />
+          </div>
+          <select name="dictionary" value={dict} onChange={handleChange}>
+            <option value="Guesses">Guesses</option>
+            <option value="Words">All Words</option>
+          </select>
+
       </div>
     );
   } else {
@@ -110,10 +197,19 @@ function WordInput() {
           <button type="submit">Enter</button></form>
           <form onSubmit={onButtonReset} style={{display:"inline"}}>
           <button type="submit">Reset</button></form>
+
+          <div className="Results">
+          <p style={{fontSize: "20px",marginBottom:"0"}}>({total.length})</p>
+            <textarea name="message" value={total} />
+          </div>
+          <select name="dictionary" value={dict} onChange={handleChange}>
+            <option value="Guesses">Guesses</option>
+            <option value="Words">All Words</option>
+          </select>
+
       </div>
     );
   }
-
 
 }
 export default WordInput;
