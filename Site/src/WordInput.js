@@ -89,8 +89,18 @@ function checkColor(row,i) {
     if (row[j]===0) {
       //white
       if (white!==[]) {
-        setWhite([...white,c]);
+        let found = false;
+        for (let w = 0; w < white.length; ++w) {
+          if (white[w]===c) {
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          setWhite([...white,c]);
+        }
       }else {
+        //first white
         setWhite([c]);
       }
     }else if (row[j]===1) {
@@ -198,6 +208,31 @@ function list() {
         }
         newList = tempList;
       }
+      //need to remove all white letters
+      console.log(white);
+      console.log(newList);
+      let tempList = [];
+      let count = 0;
+      for (let i = 0; i < newList.length; ++i) {
+        let found = false;
+        for (let w = 0; w < white.length; ++w) {
+          for (let j = 0; j < 5; ++j) {
+            if (newList[i][j]===white[w].toLowerCase()) {
+              found = true;
+              break;
+            }
+          }
+        }
+        if (!found) {
+          tempList[count] = newList[i];
+          count++;
+        }
+      }
+      console.log(tempList);
+      if (tempList.length!==0) {
+        newList = tempList;
+      }
+
       //now confirm that yellow letters are not in place where it would be green
       for (let y = 0; y < yellow.length; ++y) {
         let tempList = [];
@@ -219,7 +254,6 @@ function list() {
         }
         newList = tempList;
       }
-
 
       setTotal(newList);
 
