@@ -123,10 +123,11 @@ function checkColor(row,i) {
       setGreen(tempGreen);
     }
   }
+  list();
   handleClick();
 }
 
-  function changeColor(i,j) {
+function changeColor(i,j) {
     let w = row1; //word in number form
 
     if (row1[i][j]===0) {
@@ -140,7 +141,7 @@ function checkColor(row,i) {
     handleClick();
   }
 
-  function list() {
+function list() {
     let wordList = [];
 
     if (dict==="Guesses") {
@@ -148,7 +149,30 @@ function checkColor(row,i) {
     }else {
       wordList = words;
     }
-    setTotal(wordList);
+    if (letters.length!==0) {
+
+      //check green letters first to trim list the most
+      let newList = wordList;
+      for (let g = 0; g < 5; ++g) {
+        if (green[g]!=='_') {
+          let tempList = [];
+          let count = 0;
+
+          for (let i = 0; i < newList.length; ++i) {
+            if (newList[i][g]===green[g].toLowerCase()) {
+              tempList[count] = newList[i];
+              count++;
+            }
+          }
+          newList = tempList;
+        }
+      }
+      console.log(newList);
+      setTotal(newList);
+
+    }else {
+      setTotal(wordList);
+    }
   }
 
   if (letters.length===0) {
